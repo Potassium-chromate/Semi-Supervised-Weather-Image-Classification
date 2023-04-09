@@ -2,6 +2,11 @@
 
 This project demonstrates a semi-supervised learning approach for classifying weather images into four categories: cloudy, rain, shine, and sunrise. The classification is performed using a Convolutional Neural Network (CNN) implemented in TensorFlow and Keras. The model is first trained on a labeled dataset and then improved with self-training on an unlabeled dataset.
 
+And, in this attempt, we are using the same data and model structure as our previous supervised learning model, which can be found at [here](https://github.com/Potassium-chromate/CNN-for-recognizer-weather). The only difference is that we will be labeling only one-fifth of the data, while the rest will be left unlabeled.
+
+## 1. Purposes
+We are attempting to train a model using self-training with only one-fifth of the data used in supervised learning, while still achieving comparable performance to our previous training.
+
 ## Dependencies
 
 - Python 3.6 or higher
