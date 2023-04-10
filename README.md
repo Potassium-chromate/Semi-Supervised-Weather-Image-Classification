@@ -32,14 +32,19 @@ We use CNN to to classify the type of weather present in the image.There will be
 ![Alt Text](https://github.com/Potassium-chromate/CNN-for-recognizer-weather/blob/main/Picture/Model%20structure.png)
 
 ### Process
-1. Load pictures and resize to (300,300,3)
+1. Load labeled pictures and resize to (300,300,3)
 2. Additional augmentation for the labeled pictures  
    `rotate 45 and 60 degrees`  
    `flipped`
 3. Randomized the order of pictures and labels by using `sklearn.utils.shuffle`
 4. Train the model using only the labeled images with augmentation.  
-5. Begin self-training by using the remaining unlabeled images, without augmentation.  
-6. Generate a chart to evaluate the performance of the model  
+5. Begin self-training by using the remaining unlabeled images, with augmentation.
+6. Every iteration should randomly choose 20% amount of data from last iteration. And combine with all of `x_pseudo_labeled` as the training data in this iteration.  
+`subset_X_train = self.X_train[subset_indices]` 20% amount of data from last iteration  
+`mix_X_train = np.concatenate((subset_X_train, x_pseudo_labeled))` combime the data randomly choose from last iteration with pseudo_labeled data.  
+7. Generate a chart to evaluate the performance of the model  
+### Process diagram
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/process%20diagram.png)
 
 ## 5. Usage
 
@@ -67,11 +72,24 @@ python semi_supervised_weather_classification.py
 The script will train the CNN model using the labeled training dataset and then perform self-training on the unlabeled dataset. After the training is complete, the model's performance will be evaluated on the test dataset, and the results will be saved in an Excel file named "Result.xlsx". The trained model will be saved as "my_model.h5".
 
 ## 6. Result
-### Accuracy curve
-![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Accuracy.png)
-### Loss curve
-![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/loss.png)
-### Train confusion
-![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Train%20Confusion%20Matrix.png)
-### Test confusion
-![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Test%20Confusion%20Matrix.png)
+### Before self-training  
+`loss: 0.3927 - acc: 0.8489 - val_loss: 0.7928 - val_acc: 0.8133`
+#### Accuracy curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/before%20self_training/accuracy.png)
+#### Loss curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/before%20self_training/loss.png)
+#### Train confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/before%20self_training/Train%20Confusion%20Matrix.png)
+#### Test confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/before%20self_training/Test%20Confusion%20Matrix.png)  
+
+### After self-training  
+`loss: 0.1290 - acc: 0.9620 - val_loss: 1.5775 - val_acc: 0.8800`  
+#### Accuracy curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/after%20self_training/accuracy.png)
+#### Loss curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/after%20self_training/loss.png)
+#### Train confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/after%20self_training/Train%20Confusion%20Matrix.png)
+#### Test confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/after%20self_training/Test%20Confusion%20Matrix.png)
