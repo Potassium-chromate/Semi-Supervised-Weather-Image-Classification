@@ -43,6 +43,7 @@ We use CNN to to classify the type of weather present in the image.There will be
 `subset_X_train = self.X_train[subset_indices]` 20% amount of data from last iteration  
 `mix_X_train = np.concatenate((subset_X_train, x_pseudo_labeled))` combime the data randomly choose from last iteration with pseudo_labeled data.  
 7. Generate a chart to evaluate the performance of the model  
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/process%20diagram.png)
 
 ## 5. Usage
 
