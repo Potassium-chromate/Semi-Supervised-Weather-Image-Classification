@@ -32,14 +32,17 @@ We use CNN to to classify the type of weather present in the image.There will be
 ![Alt Text](https://github.com/Potassium-chromate/CNN-for-recognizer-weather/blob/main/Picture/Model%20structure.png)
 
 ### Process
-1. Load pictures and resize to (300,300,3)
+1. Load labeled pictures and resize to (300,300,3)
 2. Additional augmentation for the labeled pictures  
    `rotate 45 and 60 degrees`  
    `flipped`
 3. Randomized the order of pictures and labels by using `sklearn.utils.shuffle`
 4. Train the model using only the labeled images with augmentation.  
-5. Begin self-training by using the remaining unlabeled images, without augmentation.  
-6. Generate a chart to evaluate the performance of the model  
+5. Begin self-training by using the remaining unlabeled images, with augmentation.
+6. Every iteration should randomly choose 20% amount of data from last iteration. And combine with all of `x_pseudo_labeled` as the training data in this iteration.  
+`subset_X_train = self.X_train[subset_indices]` 20% amount of data from last iteration  
+`mix_X_train = np.concatenate((subset_X_train, x_pseudo_labeled))` combime the data randomly choose from last iteration with pseudo_labeled data.  
+7. Generate a chart to evaluate the performance of the model  
 
 ## 5. Usage
 
