@@ -52,11 +52,11 @@ class CNNAgent:
         model.summary()
         return model
 
-    def train(self):
+    def train(self,epoch):
         # Train the CNN model and store the training history
-        self.history = self.model.fit(self.X_train, self.Y_train, epochs=10, validation_data=(self.X_test, self.Y_test))
+        self.history = self.model.fit(self.X_train, self.Y_train, epochs=epoch, validation_data=(self.X_test, self.Y_test))
     
-    def self_train(self, unlabeled_data, threshold=0.95, n_iterations=5):
+    def self_train(self, unlabeled_data, epoch , threshold=0.95, n_iterations=5):
        for iteration in range(n_iterations):
            # Predict on the unlabeled dataset
            predictions = self.model.predict(unlabeled_data)
@@ -67,7 +67,13 @@ class CNNAgent:
            if len(pseudo_labeled_indices) == 0:
                print("No high-confidence pseudo-labels found. Stopping self-training.")
                break
-
+           
+           # Choose 30% of the labeled data to use in this iteration
+           n = int(0.2 * len(self.X_train))
+           subset_indices = np.random.choice(np.arange(len(self.X_train)), size=n, replace=False)
+           subset_X_train = self.X_train[subset_indices]
+           subset_Y_train = self.Y_train[subset_indices] 
+           
            # Create pseudo-labeled dataset
            x_pseudo_labeled = unlabeled_data[pseudo_labeled_indices]
            y_pseudo_labeled = predictions[pseudo_labeled_indices].argmax(axis=1)
@@ -76,12 +82,16 @@ class CNNAgent:
            # Add the pseudo-labeled instances to the labeled dataset
            self.X_train = np.concatenate((self.X_train, x_pseudo_labeled))
            self.Y_train = np.concatenate((self.Y_train, y_pseudo_labeled_one_hot))
-
+           
+           # 30% of old X_train and all x_pseudo_labeled
+           mix_X_train = np.concatenate((subset_X_train, x_pseudo_labeled))
+           mix_Y_train = np.concatenate((subset_Y_train, y_pseudo_labeled_one_hot))
+           
            # Remove the pseudo-labeled instances from the unlabeled dataset
            unlabeled_data = np.delete(unlabeled_data, pseudo_labeled_indices, axis=0)
 
            # Train the model using the updated labeled dataset
-           self.train()
+           self.model.fit(mix_X_train, mix_Y_train, epochs=epoch, validation_data=(self.X_test, self.Y_test))
     
     def plot_curve(self):
         # Plot the training and validation accuracy and loss
@@ -199,8 +209,16 @@ if __name__=='__main__':
     unl_data,unl_label,unl_name = pre.load(unlabeled_path,arg = 'no')
     
     Agent = CNNAgent((300, 300, 3), train_data, train_label, test_data, test_label)
-    Agent.train()
-    Agent.self_train(unl_data / 255)  # Add self-training after the initial training
+    Agent.train(epoch=6)
+    Agent.plot_curve()
+    
+    #plot confusion
+    train_pre = Agent.model.predict(train_data[::4,:,:,:])
+    Agent.plot_confusion(train_label[::4],train_pre,"Train Confusion Matrix")
+    test_pre = Agent.model.predict(test_data)
+    Agent.plot_confusion(test_label,test_pre,"Test Confusion Matrix")
+    
+    Agent.self_train(unl_data / 255,epoch=5)  # Add self-training after the initial training
     Agent.plot_curve()
     Agent.save('C:/Users/88696/Desktop/半監督式訓練集/my_model.h5')
     
@@ -212,4 +230,3 @@ if __name__=='__main__':
     #store predict result
     pre_label = np.argmax(test_pre, axis=1)
     Agent.result_csv('C:/Users/88696/Desktop/半監督式訓練集/Result.xlsx',test_name,pre_label)
-
