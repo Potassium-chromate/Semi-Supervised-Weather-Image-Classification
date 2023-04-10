@@ -218,7 +218,7 @@ if __name__=='__main__':
     test_pre = Agent.model.predict(test_data)
     Agent.plot_confusion(test_label,test_pre,"Test Confusion Matrix")
     
-    Agent.self_train(unl_data / 255,epoch=5)  # Add self-training after the initial training
+    Agent.self_train(unl_data / 255,epoch=8)  # Add self-training after the initial training
     Agent.plot_curve()
     Agent.save('C:/Users/88696/Desktop/半監督式訓練集/my_model.h5')
     
