@@ -84,7 +84,7 @@ The script will train the CNN model using the labeled training dataset and then 
 ![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/before%20self_training/Test%20Confusion%20Matrix.png)  
 
 ### After self-training  
-`loss: 0.1290 - acc: 0.9620 - val_loss: 1.5775 - val_acc: 0.8800`  
+`loss: 0.0195 - acc: 0.9973 - val_loss: 1.0226 - val_acc: 0.9067`  
 #### Accuracy curve
 ![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/after%20self_training/accuracy.png)
 #### Loss curve
