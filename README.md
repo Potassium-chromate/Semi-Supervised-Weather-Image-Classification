@@ -66,4 +66,12 @@ python semi_supervised_weather_classification.py
 ```
 The script will train the CNN model using the labeled training dataset and then perform self-training on the unlabeled dataset. After the training is complete, the model's performance will be evaluated on the test dataset, and the results will be saved in an Excel file named "Result.xlsx". The trained model will be saved as "my_model.h5".
 
-## Result
+## 6. Result
+### Accuracy curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Accuracy.png)
+### Loss curve
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/loss.png)
+### Train confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Train%20Confusion%20Matrix.png)
+### Test confusion
+![Alt Text](https://github.com/Potassium-chromate/Semi-Supervised-Weather-Image-Classification/blob/main/picture/Test%20Confusion%20Matrix.png)
